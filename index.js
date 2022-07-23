@@ -173,7 +173,7 @@ app.delete("/delete-developer-idea/:id", async (req, res) => {
   res.send("Deleted");
 });
 
-app.listen(443, () => {
+app.listen(3001, () => {
   console.log("Server is Running! Listening at port 3001!");
 });
 
