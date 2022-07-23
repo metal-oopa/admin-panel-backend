@@ -6,7 +6,11 @@ const StudentModel = require("./models/students");
 const DeveloperModel = require("./models/developers");
 const cors = require("cors");
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+  })
+);
 
 const MONGODB_CONNECTION_STRING =
   process.env.MONGODB_CONNECTION_STRING || "mongodb://localhost/hirabledb";
