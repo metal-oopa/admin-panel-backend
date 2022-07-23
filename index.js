@@ -29,7 +29,6 @@ app.get("/", (req, res) => {
     "update company details":
       "/update-student-idea/?_id=<company_id> //PUT method",
     "delete company": "/delete-student-idea/?_id=<company_id> //TODO",
-    MONGO_URI: MONGODB_CONNECTION_STRING,
   });
 });
 
