@@ -20,6 +20,18 @@ mongoose.connect(MONGODB_CONNECTION_STRING, {
   useNewUrlParser: true,
 });
 
+app.get("/", (req, res) => {
+  res.json({
+    "get list of all companies": "/get-ideas-for-students",
+    "get details of a company by id":
+      "/get-idea-for-students/?_id=<company_id>",
+    "post a new company": "/create-idea-for-students",
+    "update company details":
+      "/update-student-idea/?_id=<company_id> //PUT method",
+    "delete company": "/delete-student-idea/?_id=<company_id> //TODO",
+  });
+});
+
 // get the list of all ideas
 // req.body.name / req.query.name
 app.get("/get-ideas-for-students", (req, res) => {
@@ -161,7 +173,7 @@ app.delete("/delete-developer-idea/:id", async (req, res) => {
   res.send("Deleted");
 });
 
-app.listen(3001, () => {
+app.listen(443, () => {
   console.log("Server is Running! Listening at port 3001!");
 });
 
