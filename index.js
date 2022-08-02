@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const CompanyModel = require("./models/companies");
+const CompanyModel = require("./src/models/companies");
 const cors = require("cors");
 app.use(express.json());
 app.use(
@@ -13,7 +13,8 @@ app.use(
 );
 
 const MONGODB_CONNECTION_STRING =
-  process.env.MONGODB_CONNECTION_STRING || "mongodb://localhost/hirabledb";
+  process.env.MONGODB_CONNECTION_STRING ||
+  "mongodb://http://localhost/hirabledb";
 
 mongoose.connect(MONGODB_CONNECTION_STRING, {
   useNewUrlParser: true,
@@ -22,27 +23,15 @@ mongoose.connect(MONGODB_CONNECTION_STRING, {
 app.get("/", (req, res) => {
   res.json({
     "get list of all companies": "/get-companies",
-    "get details of a company by id": "/get-companies/?_id=<company_id>",
+    "get details of a company by id": "/get-company/?_id=<company_id>",
     "post a new company": "/create-company",
     "update company details": "/update-company/?_id=<company_id> //PUT method",
     "delete company": "/delete-company/?_id=<company_id> //DELETE method",
   });
 });
 
-// get the list of all ideas
-// req.body.name / req.query.name
-app.get("/get-companies", (req, res) => {
-  CompanyModel.find({}, (err, result) => {
-    if (err) {
-      res.json(err);
-    } else {
-      res.json(result);
-    }
-  });
-});
-
 // get a single idea by using _id
-app.get("/get-companies", (req, res) => {
+app.get("/get-company", (req, res) => {
   try {
     if (req.query._id !== "undefined") {
       CompanyModel.findOne({ _id: req.query._id }, (err, data) => {
@@ -59,6 +48,18 @@ app.get("/get-companies", (req, res) => {
   }
 });
 
+// get the list of all ideas
+// req.body.name / req.query.name
+app.get("/get-companies", (req, res) => {
+  CompanyModel.find({}, (err, result) => {
+    if (err) {
+      res.json(err);
+    } else {
+      console.log("OK");
+      res.json(result);
+    }
+  });
+});
 // create operations
 app.post("/create-company", async (req, res) => {
   const ideaForCompany = req.body;
@@ -71,19 +72,27 @@ app.post("/create-company", async (req, res) => {
 // * Update opertions
 app.put("/update-company", async (req, res) => {
   const _id = req.query._id;
+  const updatedDetails = {
+    title: req.body.title,
+    subtitle: req.body.subtitle,
+    description: req.body.description,
+    image: req.body.image,
+    link: req.body.link,
+    facebook: req.body.facebook,
+    instagram: req.body.instagram,
+    linkedin: req.body.linkedin,
+    numberOfAssignments: req.body.numberOfAssignments,
+    numberOfOpenings: req.body.numberOfOpenings,
+    locations: req.body.locations,
+    tags: req.body.tags,
+    teamSize: req.body.teamSize,
+    keyPeople: req.body.keyPeople,
+    jobs: req.body.jobs,
+  };
 
   try {
-    await CompanyModel.updateOne(
-      { _id: _id },
-      {
-        title: req.body.title,
-        subtitle: req.body.subtitle,
-        description: req.body.description,
-        image: req.body.image,
-        link: req.body.link,
-      }
-    );
-    res.send("Updated");
+    const response = await CompanyModel.updateOne({ _id: _id }, updatedDetails);
+    res.send(updatedDetails);
   } catch (err) {
     console.log(err);
     res.send(err);
