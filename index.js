@@ -72,23 +72,7 @@ app.post("/create-company", async (req, res) => {
 // * Update opertions
 app.put("/update-company", async (req, res) => {
   const _id = req.query._id;
-  const updatedDetails = {
-    title: req.body.title,
-    subtitle: req.body.subtitle,
-    description: req.body.description,
-    image: req.body.image,
-    link: req.body.link,
-    facebook: req.body.facebook,
-    instagram: req.body.instagram,
-    linkedin: req.body.linkedin,
-    numberOfAssignments: req.body.numberOfAssignments,
-    numberOfOpenings: req.body.numberOfOpenings,
-    locations: req.body.locations,
-    tags: req.body.tags,
-    teamSize: req.body.teamSize,
-    keyPeople: req.body.keyPeople,
-    jobs: req.body.jobs,
-  };
+  const updatedDetails = req.body;
 
   try {
     const response = await CompanyModel.updateOne({ _id: _id }, updatedDetails);

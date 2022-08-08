@@ -4,33 +4,55 @@ const CompanySchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    default: "",
   },
-  subtitle: {
+  tagline: {
     type: String,
+    default: "",
+  },
+  featured: {
+    type: Boolean,
+    default: false,
   },
   description: {
     type: String,
+    default: "",
+  },
+  about: {
+    type: String,
+    default: "",
   },
   image: {
     type: String,
+    default: "",
   },
   link: {
     type: String,
+    default: "",
   },
   facebook: {
     type: String,
+    default: "",
+  },
+  twitter: {
+    type: String,
+    default: "",
   },
   instagram: {
     type: String,
+    default: "",
   },
   linkedin: {
     type: String,
-  },
-  numberOfAssignments: {
-    type: String,
+    default: "",
   },
   numberOfOpenings: {
     type: String,
+    default: "",
+  },
+  totalFunding: {
+    type: String,
+    default: "",
   },
   locations: [
     {
@@ -44,29 +66,41 @@ const CompanySchema = new mongoose.Schema({
       selected: Boolean,
     },
   ],
-  teamSize: [
-    {
-      name: String,
-      selected: Boolean,
-    },
-  ],
+  teamSize: {
+    type: String,
+    default: "",
+  },
   keyPeople: [
     {
-      name: String,
-      role: String,
-      email: String,
-      alternateEmail: String,
-      linkedin: String,
+      name: {
+        type: String,
+        default: "",
+      },
+      role: {
+        type: String,
+        default: "",
+      },
+      email: {
+        type: String,
+        default: "",
+      },
+      alternateEmail: {
+        type: String,
+        default: "",
+      },
+      linkedin: {
+        type: String,
+        default: "",
+      },
     },
   ],
-  jobs: [
-    {
-      title: String,
-      jobType: String,
-      description: String,
-      responsibilities: String,
-    },
-  ],
+  // jobs: [
+  //   {
+  //     title: String,
+  //     jobType: String,
+  //     description: String,
+  //   },
+  // ],
 });
 const CompanyModel = mongoose.model("companies", CompanySchema);
 module.exports = CompanyModel;

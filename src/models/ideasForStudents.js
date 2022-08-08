@@ -5,7 +5,7 @@ const IdeasForStudentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  subtitle: {
+  tagline: {
     type: String,
   },
   description: {
