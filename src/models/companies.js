@@ -94,13 +94,13 @@ const CompanySchema = new mongoose.Schema({
       },
     },
   ],
-  // jobs: [
-  //   {
-  //     title: String,
-  //     jobType: String,
-  //     description: String,
-  //   },
-  // ],
+  jobs: [
+    {
+      title: String,
+      jobType: String,
+      description: String,
+    },
+  ],
 });
 const CompanyModel = mongoose.model("companies", CompanySchema);
 module.exports = CompanyModel;
