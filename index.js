@@ -7,7 +7,10 @@ const cors = require("cors");
 app.use(express.json());
 app.use(
   cors({
-    origin: true,
+    origin: [
+      "http://localhost:3000",
+      "https://hirable-frontend.herokuapp.com/",
+    ],
     credentials: true,
   })
 );
@@ -33,7 +36,7 @@ app.get("/", (req, res) => {
 // get a single idea by using _id
 app.get("/get-company", (req, res) => {
   try {
-    if (req.query._id !== "undefined") {
+    if (req.query._id !== undefined) {
       CompanyModel.findOne({ _id: req.query._id }, (err, data) => {
         if (!err) {
           // console.log(data);
