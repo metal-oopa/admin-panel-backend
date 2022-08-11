@@ -69,7 +69,7 @@ app.post("/create-company", async (req, res) => {
   const newideaForCompany = new CompanyModel(ideaForCompany);
   await newideaForCompany.save();
 
-  res.json(newideaForCompany);
+  res.status(201).json(newideaForCompany);
 });
 
 // * Update opertions
