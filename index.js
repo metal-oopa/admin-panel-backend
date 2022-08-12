@@ -10,6 +10,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://hirable-frontend.herokuapp.com/",
+      "https://admin-panel-beta-six.vercel.app/",
     ],
     credentials: true,
   })
