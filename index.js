@@ -12,7 +12,7 @@ app.use(
       "https://hirable-frontend.herokuapp.com/",
       "https://admin-panel-beta-six.vercel.app/",
     ],
-    credentials: true,
+    credentials: false,
   })
 );
 
