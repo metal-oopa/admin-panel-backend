@@ -7,12 +7,8 @@ const cors = require("cors");
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://hirable-frontend.herokuapp.com/",
-      "https://admin-panel-beta-six.vercel.app/",
-    ],
-    credentials: false,
+    origin: true,
+    credentials: true,
   })
 );
 
