@@ -4,6 +4,9 @@ const app = express();
 const mongoose = require("mongoose");
 const CompanyModel = require("./src/models/companies");
 const cors = require("cors");
+var ImageKit = require("imagekit");
+var fs = require("fs");
+
 app.use(express.json());
 app.use(
   cors({
@@ -18,6 +21,12 @@ const MONGODB_CONNECTION_STRING =
 
 mongoose.connect(MONGODB_CONNECTION_STRING, {
   useNewUrlParser: true,
+});
+
+var imagekit = new ImageKit({
+  publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
 });
 
 app.get("/", (req, res) => {
@@ -72,6 +81,29 @@ app.post("/create-company", async (req, res) => {
 // * Update opertions
 app.put("/update-company", async (req, res) => {
   const _id = req.query._id;
+
+  if (req.body.image && req.body.image.startsWith("data:image")) {
+    imagekit.upload(
+      {
+        file: req.body.image,
+        fileName: req.body.title + "_logo.png",
+      },
+      async function (error, result) {
+        if (error) console.log(error);
+        req.body.image = result.url;
+
+        try {
+          const response = await CompanyModel.updateOne({ _id: _id }, req.body);
+          res.send(req.body);
+        } catch (err) {
+          console.log(err);
+          res.send(err);
+        }
+      }
+    );
+    return;
+  }
+
   const updatedDetails = req.body;
 
   try {

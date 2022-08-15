@@ -96,9 +96,24 @@ const CompanySchema = new mongoose.Schema({
   ],
   jobs: [
     {
-      title: String,
-      jobType: String,
-      description: String,
+      title: {
+        type: String,
+        default: "",
+      },
+      jobType: [
+        {
+          name: String,
+          selected: Boolean,
+        },
+      ],
+      featured: {
+        type: Boolean,
+        default: false,
+      },
+      description: {
+        type: String,
+        default: "",
+      },
     },
   ],
 });

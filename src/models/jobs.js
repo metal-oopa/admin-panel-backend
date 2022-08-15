@@ -16,7 +16,7 @@ const JobSchema = new mongoose.Schema({
   },
   featured: {
     type: Boolean,
-    default: "",
+    default: false,
   },
   companyId: {
     type: String,
