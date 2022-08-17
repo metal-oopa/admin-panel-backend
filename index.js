@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const CompanyModel = require("./src/models/companies");
+const JobModel = require("./src/models/jobs");
 const cors = require("cors");
 var ImageKit = require("imagekit");
 var fs = require("fs");
@@ -69,6 +70,97 @@ app.get("/get-companies", (req, res) => {
     }
   });
 });
+
+// get jobs using the company id
+app.get("/get-jobs", (req, res) => {
+  const companyId = req.body.companyId;
+
+  try {
+    if (companyId !== undefined) {
+      JobModel.find({ companyId: companyId }, (err, data) => {
+        if (!err) {
+          res.send(data);
+        } else {
+          console.log(err);
+          res.send(err);
+        }
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.send(err);
+  }
+});
+
+// post request to create a new job using company id
+app.post("/create-job", (req, res) => {
+  const companyId = req.body.companyId;
+  const jobtitle = req.body.jobtitle;
+  const type = req.body.type;
+  const description = req.body.description;
+  const featured = req.body.featured;
+
+  try {
+    if (req.body.companyId !== undefined) {
+      const newJob = new JobModel({
+        companyId: companyId,
+        jobtitle: jobtitle,
+        type: type,
+        description: description,
+        featured: featured,
+      });
+      newJob.save((err, data) => {
+        if (!err) {
+          res.send(data);
+        } else {
+          console.log(err);
+        }
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+// update a job using _id
+app.put("/update-job", (req, res) => {
+  const _id = req.body._id;
+
+  try {
+    if (req.body._id !== undefined) {
+      JobModel.updateOne({ _id: _id }, req.body, (err, data) => {
+        if (!err) {
+          res.send(data);
+        } else {
+          console.log(err);
+        }
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
+});
+
+// delete a job using _id
+app.delete("/delete-job", (req, res) => {
+  const _id = req.body._id;
+
+  try {
+    if (req.body._id !== undefined) {
+      JobModel.findOneAndDelete({ _id: _id }, (err, data) => {
+        if (!err) {
+          res.send(data);
+        } else {
+          res.send(err);
+        }
+      });
+    }
+  } catch (error) {
+    res.send(error);
+  }
+});
+
 // create operations
 app.post("/create-company", async (req, res) => {
   const ideaForCompany = req.body;
@@ -81,8 +173,8 @@ app.post("/create-company", async (req, res) => {
 // * Update opertions
 app.put("/update-company", async (req, res) => {
   const _id = req.query._id;
-
-  if (req.body.image && req.body.image.startsWith("data:image")) {
+  //  && req.body.image.startsWith("data:image")
+  if (req.body.image) {
     imagekit.upload(
       {
         file: req.body.image,
