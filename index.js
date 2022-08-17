@@ -37,6 +37,10 @@ app.get("/", (req, res) => {
     "post a new company": "/create-company",
     "update company details": "/update-company/?_id=<company_id> //PUT method",
     "delete company": "/delete-company/?_id=<company_id> //DELETE method",
+    "get list of all jobs using companyId": "/get-jobs",
+    "post a new job": "/create-job",
+    "update job details": "/update-job //PUT method",
+    "delete job": "/delete-job //DELETE method",
   });
 });
 
@@ -65,7 +69,17 @@ app.get("/get-companies", (req, res) => {
     if (err) {
       res.json(err);
     } else {
-      console.log("OK");
+      res.json(result);
+    }
+  });
+});
+
+// get all jobs
+app.get("/get-all-jobs", (req, res) => {
+  JobModel.find({}, (err, result) => {
+    if (err) {
+      res.json(err);
+    } else {
       res.json(result);
     }
   });
@@ -73,19 +87,17 @@ app.get("/get-companies", (req, res) => {
 
 // get jobs using the company id
 app.get("/get-jobs", (req, res) => {
-  const companyId = req.body.companyId;
+  const companyId = req.query.companyId;
 
   try {
-    if (companyId !== undefined) {
-      JobModel.find({ companyId: companyId }, (err, data) => {
-        if (!err) {
-          res.send(data);
-        } else {
-          console.log(err);
-          res.send(err);
-        }
-      });
-    }
+    JobModel.find({ companyId: companyId }, (err, data) => {
+      if (!err) {
+        res.send(data);
+      } else {
+        console.log(err);
+        res.send(err);
+      }
+    });
   } catch (error) {
     console.log(error);
     res.send(err);
@@ -94,21 +106,11 @@ app.get("/get-jobs", (req, res) => {
 
 // post request to create a new job using company id
 app.post("/create-job", (req, res) => {
-  const companyId = req.body.companyId;
-  const jobtitle = req.body.jobtitle;
-  const type = req.body.type;
-  const description = req.body.description;
-  const featured = req.body.featured;
+  const job = req.body;
 
   try {
     if (req.body.companyId !== undefined) {
-      const newJob = new JobModel({
-        companyId: companyId,
-        jobtitle: jobtitle,
-        type: type,
-        description: description,
-        featured: featured,
-      });
+      const newJob = new JobModel(job);
       newJob.save((err, data) => {
         if (!err) {
           res.send(data);
@@ -127,15 +129,13 @@ app.put("/update-job", (req, res) => {
   const _id = req.body._id;
 
   try {
-    if (req.body._id !== undefined) {
-      JobModel.updateOne({ _id: _id }, req.body, (err, data) => {
-        if (!err) {
-          res.send(data);
-        } else {
-          console.log(err);
-        }
-      });
-    }
+    JobModel.updateOne({ _id: _id }, req.body, (err, data) => {
+      if (!err) {
+        res.send(data);
+      } else {
+        console.log(err);
+      }
+    });
   } catch (error) {
     console.log(error);
     res.send(error);
