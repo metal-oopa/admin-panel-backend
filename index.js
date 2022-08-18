@@ -30,6 +30,12 @@ var imagekit = new ImageKit({
   urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
 });
 
+// get imagekit authentication parameters
+app.get("/imagekit", (req, res) => {
+  const autheticationParameters = imagekit.getAuthenticationParameters();
+  res.send(autheticationParameters);
+});
+
 app.get("/", (req, res) => {
   res.json({
     "get list of all companies": "/get-companies",
@@ -173,34 +179,10 @@ app.post("/create-company", async (req, res) => {
 // * Update opertions
 app.put("/update-company", async (req, res) => {
   const _id = req.query._id;
-  //  && req.body.image.startsWith("data:image")
-  if (req.body.image) {
-    imagekit.upload(
-      {
-        file: req.body.image,
-        fileName: req.body.title + "_logo.png",
-      },
-      async function (error, result) {
-        if (error) console.log(error);
-        req.body.image = result.url;
-
-        try {
-          const response = await CompanyModel.updateOne({ _id: _id }, req.body);
-          res.send(req.body);
-        } catch (err) {
-          console.log(err);
-          res.send(err);
-        }
-      }
-    );
-    return;
-  }
-
-  const updatedDetails = req.body;
 
   try {
-    const response = await CompanyModel.updateOne({ _id: _id }, updatedDetails);
-    res.send(updatedDetails);
+    const response = await CompanyModel.updateOne({ _id: _id }, req.body);
+    res.send(req.body);
   } catch (err) {
     console.log(err);
     res.send(err);
